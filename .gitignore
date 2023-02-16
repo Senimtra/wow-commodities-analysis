@@ -1,3 +1,6 @@
+/_wow_venv
 api_credentials.txt
 api_access_token.txt
-data/
+/data
+*.pyc
+db.sqlite3
