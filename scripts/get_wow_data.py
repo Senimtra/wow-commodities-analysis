@@ -58,14 +58,41 @@ ravencrest_df['item'] = ravencrest_df['item'].apply(lambda x: x['id'])
 commodities_df.rename(columns = {'id': 'auction_id', 'item': 'item_id'}, inplace = True)
 ravencrest_df.rename(columns = {'id': 'auction_id', 'item': 'item_id'}, inplace = True)
 
+# Drop columns 'auction_id' + 'time_left'
+commodities_df.drop(['auction_id', 'time_left'], axis = 1, inplace = True)
+
+# Use the weighted (quantity) median to pick a reasonable unit price
+def weighted_median(item_df):
+   sorted_df = item_df.sort_values('unit_price') # sort values in ascending order by unit_price
+   cum_weights = sorted_df['quantity'].cumsum() # calculate the cumulative sum of quantities
+   total_weight = cum_weights.iloc[-1] # get the total weight
+   if total_weight % 2 == 1: # if the total weight is odd
+      median_index = cum_weights.searchsorted(total_weight / 2) # find the index of the median
+      return sorted_df.iloc[median_index]['unit_price'] # return the corresponding unit_price value
+   else: # if the total weight is even
+      median_index = cum_weights.searchsorted(total_weight / 2, side = 'right') # find the index of the right median
+      median_values = sorted_df.iloc[median_index - 1: median_index]['unit_price'] # get the two median values
+      # If the mean of the two median values is NaN, return the median unit price (unweighted)
+      return item_df['unit_price'].median() if pd.isna(median_values.mean()) else median_values.mean()
+   
+price_weighted_median = commodities_df.groupby('item_id').apply(lambda x: weighted_median(x)).reset_index(name = 'weighted')
+price_weighted_median['weighted'] = price_weighted_median['weighted'].astype(int)
+
+# Group by item_id and sum quantity
+commodities_df = commodities_df.groupby('item_id').agg({'unit_price': 'min', 'timestamp': 'first', 'quantity': 'sum'})
+
+# Merge commodities + weighted median price
+commodities_df = pd.merge(commodities_df, price_weighted_median, left_on = 'item_id', right_on = 'item_id')
+commodities_df = commodities_df[['item_id', 'quantity', 'unit_price', 'weighted', 'timestamp']]
+
 # Save commodities data to file
 def stamp_string(timestamp):
    day = re.findall('-(\d.) ', str(timestamp))[0]
    hour = re.findall(' (\d.):', str(timestamp))[0]
    return 'd' + day + '_h' + hour
 
-file_stamp_commodities = stamp_string(commodities_df.iloc[:1, 5])
-commodities_df.to_csv(f'./data/commodities/{file_stamp_commodities}_commodities.csv')
+file_stamp_commodities = stamp_string(commodities_df.iloc[:1, 4])
+commodities_df.to_csv(f'./data/commodities/{file_stamp_commodities}_commodities.csv', index = False)
 
 file_stamp_ravencrest = stamp_string(ravencrest_df.iloc[:1, 6])
 ravencrest_df.to_csv(f'./data/auctions/{file_stamp_ravencrest}_auctions.csv')
