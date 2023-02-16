@@ -1,5 +1,6 @@
 # Imports
 import pandas as pd
+import numpy as np
 import requests
 import re
 from datetime import datetime
@@ -37,8 +38,14 @@ def get_ravencrest(access_token):
    response = requests.get(search)
    return response.json()['auctions']
 
-ravencrest_data = get_ravencrest(access_token)
-ravencrest_df = pd.DataFrame(ravencrest_data)
+auctions_data = get_ravencrest(access_token)
+auctions_df = pd.DataFrame(auctions_data)
+
+# Remove items that do not have a buyout price
+auctions_df = auctions_df[~auctions_df['buyout'].isna()]
+
+# Remove items that have a price higher than gold limit (9999999g)
+auctions_df = auctions_df[auctions_df['buyout'] < 1000000000]
 
 # Add timestamp
 now = datetime.now()
@@ -47,19 +54,22 @@ date_str = now.strftime('%Y-%m-%d %H:%M:%S')
 commodities_df['timestamp'] = date_str
 commodities_df['timestamp'] = pd.to_datetime(commodities_df['timestamp'])
 
-ravencrest_df['timestamp'] = date_str
-ravencrest_df['timestamp'] = pd.to_datetime(ravencrest_df['timestamp'])
+auctions_df['timestamp'] = date_str
+auctions_df['timestamp'] = pd.to_datetime(auctions_df['timestamp'])
 
 # Extract item ids
 commodities_df['item'] = commodities_df['item'].apply(lambda x: x['id'])
-ravencrest_df['item'] = ravencrest_df['item'].apply(lambda x: x['id'])
+auctions_df['item'] = auctions_df['item'].apply(lambda x: x['id'])
 
 # Rename columns
 commodities_df.rename(columns = {'id': 'auction_id', 'item': 'item_id'}, inplace = True)
-ravencrest_df.rename(columns = {'id': 'auction_id', 'item': 'item_id'}, inplace = True)
+auctions_df.rename(columns = {'id': 'auction_id', 'item': 'item_id'}, inplace = True)
 
 # Drop columns 'auction_id' + 'time_left'
 commodities_df.drop(['auction_id', 'time_left'], axis = 1, inplace = True)
+
+# Drop columns 'auction_id', 'time_left', 'bid'
+auctions_df.drop(['auction_id', 'time_left', 'bid'], axis = 1, inplace = True)
 
 # Use the weighted (quantity) median to pick a reasonable unit price
 def weighted_median(item_df):
@@ -79,11 +89,19 @@ price_weighted_median = commodities_df.groupby('item_id').apply(lambda x: weight
 price_weighted_median['weighted'] = price_weighted_median['weighted'].astype(int)
 
 # Group by item_id and sum quantity
-commodities_df = commodities_df.groupby('item_id').agg({'unit_price': 'min', 'timestamp': 'first', 'quantity': 'sum'})
+commodities_df = commodities_df.groupby('item_id').agg({'unit_price': np.min, 'timestamp': 'first', 'quantity': np.sum})
 
 # Merge commodities + weighted median price
 commodities_df = pd.merge(commodities_df, price_weighted_median, left_on = 'item_id', right_on = 'item_id')
 commodities_df = commodities_df[['item_id', 'quantity', 'unit_price', 'weighted', 'timestamp']]
+
+# Use the cheapest price available since there is no way to get information about the sold auctions.
+auctions_df = auctions_df.groupby('item_id').agg({'buyout': np.min, 'quantity': np.sum, 'timestamp': 'first'})
+auctions_df.reset_index(inplace = True)
+
+auctions_df['buyout'] = auctions_df['buyout'].astype(int)
+auctions_df.rename(columns = {'buyout': 'unit_price'}, inplace = True)
+auctions_df = auctions_df[['item_id', 'quantity', 'unit_price', 'timestamp']]
 
 # Save commodities data to file
 def stamp_string(timestamp):
@@ -94,5 +112,5 @@ def stamp_string(timestamp):
 file_stamp_commodities = stamp_string(commodities_df.iloc[:1, 4])
 commodities_df.to_csv(f'./data/commodities/{file_stamp_commodities}_commodities.csv', index = False)
 
-file_stamp_ravencrest = stamp_string(ravencrest_df.iloc[:1, 6])
-ravencrest_df.to_csv(f'./data/auctions/{file_stamp_ravencrest}_auctions.csv')
+file_stamp_auctions = stamp_string(auctions_df.iloc[:1, 3])
+auctions_df.to_csv(f'./data/auctions/{file_stamp_auctions}_auctions.csv', index = False)
