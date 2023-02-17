@@ -86,7 +86,7 @@ def weighted_median(item_df):
       return item_df['unit_price'].median() if pd.isna(median_values.mean()) else median_values.mean()
    
 price_weighted_median = commodities_df.groupby('item_id').apply(lambda x: weighted_median(x)).reset_index(name = 'weighted')
-price_weighted_median['weighted'] = price_weighted_median['weighted'].astype(int)
+price_weighted_median['weighted'] = price_weighted_median['weighted'].astype('int64')
 
 # Group by item_id and sum quantity
 commodities_df = commodities_df.groupby('item_id').agg({'unit_price': np.min, 'timestamp': 'first', 'quantity': np.sum})
@@ -110,7 +110,7 @@ def stamp_string(timestamp):
    return 'd' + day + '_h' + hour
 
 file_stamp_commodities = stamp_string(commodities_df.iloc[:1, 4])
-commodities_df.to_csv(f'./data/commodities/{file_stamp_commodities}_commodities.csv', index = False)
+commodities_df.to_csv(f'./data/commodities/{file_stamp_commodities}_commodities.csv', index = False, date_format = '%Y-%m-%d %H:%M:%S')
 
 file_stamp_auctions = stamp_string(auctions_df.iloc[:1, 3])
-auctions_df.to_csv(f'./data/auctions/{file_stamp_auctions}_auctions.csv', index = False)
+auctions_df.to_csv(f'./data/auctions/{file_stamp_auctions}_auctions.csv', index = False, date_format = '%Y-%m-%d %H:%M:%S')
