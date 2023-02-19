@@ -1,6 +1,6 @@
 from django.db import models
 
-# Commodities database model
+# Commodities table model
 class Commodities(models.Model):
    item_id = models.IntegerField()
    quantity = models.IntegerField()
@@ -8,7 +8,7 @@ class Commodities(models.Model):
    weighted = models.IntegerField()
    timestamp = models.DateTimeField()
 
-# Auctions database model
+# Auctions table model
 class Auctions(models.Model):
    item_id = models.IntegerField()
    quantity = models.IntegerField()
