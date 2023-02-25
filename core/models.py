@@ -31,8 +31,14 @@ class ItemsData(models.Model):
    item_subclass = models.CharField(max_length = 30)
    description = models.TextField(max_length = 500)
 
+   class Meta:
+      verbose_name_plural = 'items data'
+
 # Items media table model
 class ItemsMedia(models.Model):
    item_id = models.IntegerField()
    media = models.CharField(max_length = 20)
    link = models.CharField(max_length = 255)
+
+   class Meta:
+      verbose_name_plural = 'items media'
