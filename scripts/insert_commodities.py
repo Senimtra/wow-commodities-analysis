@@ -13,4 +13,7 @@ def run():
          print(count, row)
          commodity = Commodities(**row)
          objects.append(commodity)
+         if count % 100000 == 0:
+            Commodities.objects.bulk_create(objects)
+            objects = []
       Commodities.objects.bulk_create(objects)

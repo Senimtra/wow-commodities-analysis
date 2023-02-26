@@ -13,4 +13,7 @@ def run():
          print(count, row)
          auction = Auctions(**row)
          objects.append(auction)
+         if count % 100000 == 0:
+            Auctions.objects.bulk_create(objects)
+            objects = []
       Auctions.objects.bulk_create(objects)
