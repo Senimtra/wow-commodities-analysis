@@ -4,3 +4,7 @@ api_access_token.txt
 /data
 *.pyc
 db.sqlite3
+/static/admin
+/static/django_extensions
+/core/migrations
+.prettierignore
