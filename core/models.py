@@ -4,8 +4,8 @@ from django.db import models
 class Commodities(models.Model):
    item_id = models.IntegerField()
    quantity = models.IntegerField()
-   unit_price = models.IntegerField()
-   weighted = models.IntegerField()
+   unit_price = models.BigIntegerField()
+   weighted = models.BigIntegerField()
    timestamp = models.DateTimeField()
 
    class Meta:
@@ -15,7 +15,7 @@ class Commodities(models.Model):
 class Auctions(models.Model):
    item_id = models.IntegerField()
    quantity = models.IntegerField()
-   unit_price = models.IntegerField()
+   unit_price = models.BigIntegerField()
    timestamp = models.DateTimeField()
 
    class Meta:
