@@ -1,9 +1,53 @@
 <!-- prettier-ignore -->
 {% extends "base.html" %}
-
 {% block title %}Item Distribution{% endblock %}
-
 {% block content %}
+
+<!-- ### Include Chart.js CDN ### -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <h1>Item Distribution</h1>
 <p>Item distribution based on quality/level/class/subclass</p>
+
+<div>
+  <canvas id="bar-chart" width="800" height="450"></canvas>
+</div>
+
+<!-- ### Item qualities / Item quantities (views.py) ### -->
+<!-- prettier-ignore -->
+<script id='quantities-list' type='application/json'>{{quantities|safe}}</script>
+
+<!-- ### Item qualities distribution bar chart ### -->
+<script>
+  qualities = JSON.parse(document.getElementById('quantities-list').textContent);
+  let quality = [];
+  let quantity = [];
+  for (let i = 0; i < qualities.length; i++) {
+    if (qualities[i].quality !== 'UNKNOWN') {
+      quality.push(qualities[i].quality);
+      quantity.push(qualities[i].total_quantity);
+    }
+  }
+
+  new Chart(document.getElementById('bar-chart'), {
+    type: 'bar',
+    data: {
+      labels: quality,
+      datasets: [
+        {
+          label: 'Total Items per Quality',
+          backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
+          data: quantity,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+      },
+    },
+  });
+</script>
+
 {% endblock %}
