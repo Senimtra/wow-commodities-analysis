@@ -1,4 +1,5 @@
 /_wow_venv
+__pycache__
 api_credentials.txt
 api_access_token.txt
 /data
@@ -6,6 +7,4 @@ api_access_token.txt
 db.sqlite3
 /static/admin
 /static/django_extensions
-/core/migrations
-.prettierignore
 .env

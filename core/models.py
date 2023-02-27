@@ -7,6 +7,14 @@ class Commodities(models.Model):
    unit_price = models.BigIntegerField()
    weighted = models.BigIntegerField()
    timestamp = models.DateTimeField()
+   name = models.CharField(max_length = 100)
+   quality = models.CharField(max_length = 20)
+   level = models.IntegerField()
+   item_class = models.CharField(max_length = 30)
+   item_subclass = models.CharField(max_length = 30)
+   description = models.TextField(max_length = 500)
+   media = models.CharField(max_length = 20)
+   link = models.CharField(max_length = 255)
 
    class Meta:
       verbose_name_plural = 'commodities'
