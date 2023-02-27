@@ -1,10 +1,53 @@
+<!-- prettier-ignore -->
 {% extends "base.html" %}
-
 {% block title %}Analysis{% endblock %}
-
 {% block content %}
+
+<!-- ### Include Chart.js CDN ### -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <h1>Analysis</h1>
 <p>World of Warcraft Commodities Analysis</p>
 
-<p>{{ data }}</p>
+<div>
+  <canvas id="line-chart" width="800" height="450"></canvas>
+</div>
+
+<!-- ### Unique timestamps / Amount of auctions (views.py) ### -->
+<!-- prettier-ignore -->
+<script id="timestamp-list" type="application/json">{{timestamp_list|safe}}</script>
+<!-- prettier-ignore -->
+<script id="auctions-count-list" type="application/json">{{auctions_count_list}}</script>
+
+<script>
+  const timestamps = JSON.parse(document.getElementById("timestamp-list").textContent);
+  const auctions = JSON.parse(document.getElementById("auctions-count-list").textContent);
+
+  const weekdays = timestamps.map((timestamp) => {
+    const date = new Date(timestamp);
+    const options = { weekday: 'long' };
+    return date.toLocaleDateString('en-US', options);
+  });
+
+  new Chart(document.getElementById("line-chart"), {
+    type: "line",
+    data: {
+      labels: weekdays,
+      datasets: [
+        {
+          data: auctions,
+          label: "Weekly Amount of Auctions",
+          borderColor: "#3e95cd",
+          fill: true,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+      },
+    },
+  });
+</script>
+
 {% endblock %}
