@@ -20,16 +20,20 @@ This project aims to analyze commodity pricing and market trends in the in-game 
 * Auction data enriched with quality, level, item class, item subclass, description and image.
 * Clean and preprocess data to eliminate irrelevant or duplicate information.
 
-## Time Series Analysis ⌚
+## Market Analysis ⌚
 
-* Track the price changes of individual items over time.
-* Create a time series for each item and identify patterns such as weekly fluctuations.
-* Analyze time series data to identify items that have a consistent pattern of fluctuation in price.
+* Analyze market trends to identify patterns and fluctuations in supply and demand.
+* Create charts to show number of items available, volumes traded, and market value.
 
-## Clustering 🪢
+## Item Distribution Analysis 🍰
 
-* Use a clustering algorithm to group similar items based on their price patterns.
-* Identify items that are traded in large quantities within each cluster to find potentially profitable items to trade.
+* Create charts to show the distribution of each item against other relevant features such as sales volume and popularity.
+* This will help players understand which items are in high demand and identify potential opportunities for profitable trades.
+
+## Profitability Calculation 💰
+
+* Calculate the profitability of each item based on traded quantities and market prices.
+* Identify items that have high profitability and are currently underpriced in the market.
 
 ## Data Visualization 📈
 
@@ -39,12 +43,12 @@ This project aims to analyze commodity pricing and market trends in the in-game 
 
 * Data collection (World of Warcraft API)
 * Data cleaning (Python, Pandas)
-* Data analysis (Time series analysis, Clustering)
+* Data analysis (Time series analysis)
 * Data visualization (Matplotlib, Seaborn, ChartJS)
 
 ## Technologies used ⚙️
 
-* SQL database (AWS)
+* PostgreSQL database (AWS)
 * Backend (Django, Python)
 * Frontend (JavaScript, HTML, CSS)
 
