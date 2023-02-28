@@ -11,7 +11,7 @@
 
 <div class="row justify-content-center">
   <div class="col-md-8">
-    <canvas id="line-chart" width="800" height="450"></canvas>
+    <canvas id="items-chart" width="800" height="450"></canvas>
   </div>
 </div>
 
@@ -19,11 +19,11 @@
 <!-- prettier-ignore -->
 <script id="timestamp-list" type="application/json">{{timestamp_list|safe}}</script>
 <!-- prettier-ignore -->
-<script id="items-count-list" type="application/json">{{auctions_count_list}}</script>
+<script id="item-counts-list" type="application/json">{{item_counts_list}}</script>
 
 <script>
   const timestamps = JSON.parse(document.getElementById('timestamp-list').textContent);
-  const items = JSON.parse(document.getElementById('items-count-list').textContent);
+  const items = JSON.parse(document.getElementById('item-counts-list').textContent);
 
   const weekdays = timestamps.map((timestamp) => {
     const date = new Date(timestamp);
@@ -31,7 +31,7 @@
     return date.toLocaleDateString('en-US', options);
   });
 
-  new Chart(document.getElementById('line-chart'), {
+  new Chart(document.getElementById('items-chart'), {
     type: 'line',
     data: {
       labels: weekdays,
@@ -40,6 +40,40 @@
           data: items,
           label: 'Available unique Items',
           borderColor: '#3e95cd',
+          fill: true,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+      },
+    },
+  });
+</script>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <canvas id="quantities-chart" width="800" height="450"></canvas>
+  </div>
+</div>
+
+<!-- ### Traded quantities (views.py) ### -->
+<!-- prettier-ignore -->
+<script id="quantity-counts-list" type="application/json">{{quantity_counts_list}}</script>
+
+<script>
+  const quantities = JSON.parse(document.getElementById('quantity-counts-list').textContent);
+
+  new Chart(document.getElementById('quantities-chart'), {
+    type: 'line',
+    data: {
+      labels: weekdays,
+      datasets: [
+        {
+          data: quantities,
+          label: 'Traded volumes',
+          borderColor: '#E4C477',
           fill: true,
         },
       ],

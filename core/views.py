@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
-from django.db.models import Count
+from django.db.models import Count, Sum
 from .models import Commodities
 
 import json
@@ -10,14 +10,17 @@ def home(request):
    return HttpResponse(template.render())
 
 def market(request):
-   # Get the number of auctions per timestamp
-   auction_counts = Commodities.objects.values('timestamp').annotate(num_auctions = Count('id')).order_by('timestamp')
-   count_list = [auction_count['num_auctions'] for auction_count in auction_counts]
+   # Get the number of unique items per timestamp
+   item_counts = Commodities.objects.values('timestamp').annotate(count_items = Count('id')).order_by('timestamp')
+   item_counts_list = [item_count['count_items'] for item_count in item_counts]
+   # Get the number of traded quantities
+   quantity_counts = Commodities.objects.values('timestamp').annotate(count_quantities = Sum('quantity')).order_by('timestamp')
+   quantity_counts_list = [quantity_count['count_quantities'] for quantity_count in quantity_counts]
    # Get a list of timestamps
-   timestamp_list = [str(auction_count['timestamp']) for auction_count in auction_counts]
+   timestamp_list = [str(item_count['timestamp']) for item_count in item_counts]
    # Set up template data
    template = loader.get_template('market.html')
-   context = {'timestamp_list': json.dumps(timestamp_list), 'auctions_count_list': json.dumps(count_list)}
+   context = {'timestamp_list': json.dumps(timestamp_list), 'item_counts_list': json.dumps(item_counts_list), 'quantity_counts_list': json.dumps(quantity_counts_list)}
    return HttpResponse(template.render(context, request))
 
 def distribution(request):
