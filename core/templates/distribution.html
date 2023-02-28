@@ -62,12 +62,12 @@
 <!-- ### Item level distribution pie chart ### -->
 <script>
   level = JSON.parse(document.getElementById('level-list').textContent);
-  
+
   let item_level = [];
   let item_level_quantity = [];
   for (let i = 1; i < level.length; i++) {
     item_level.push(level[i].level);
-    item_level_quantity.push(level[i].total_level);
+    item_level_quantity.push(level[i].total_quantity);
   }
 
   new Chart(document.getElementById('bar-chart-level'), {
@@ -79,6 +79,48 @@
           label: 'Total Items per Level',
           backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
           data: item_level_quantity,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+      },
+    },
+  });
+</script>
+
+<div>
+  <canvas id="bar-chart-class" width="800" height="450"></canvas>
+</div>
+
+<!-- ### Item class / Item quantities (views.py) ### -->
+<!-- prettier-ignore -->
+<script id="class-list" type="application/json">{{class|safe}}</script>
+
+<!-- ### Item class distribution bar chart ### -->
+<script>
+  classes = JSON.parse(document.getElementById('class-list').textContent);
+
+  let item_class = [];
+  let item_class_quantity = [];
+  for (let i = 0; i < classes.length; i++) {
+    if (classes[i].item_class !== 'UNKNOWN') {
+      item_class.push(classes[i].item_class);
+      item_class_quantity.push(classes[i].total_quantity);
+    }
+  }
+
+  new Chart(document.getElementById('bar-chart-class'), {
+    type: 'bar',
+    data: {
+      labels: item_class,
+      datasets: [
+        {
+          label: 'Total Items per Class',
+          backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
+          data: item_class_quantity,
         },
       ],
     },

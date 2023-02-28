@@ -22,12 +22,14 @@ def market(request):
 
 def distribution(request):
    # Get items grouped by quality
-   quantities = Commodities.objects.values('quality').annotate(total_quantity = Count('quantity')).order_by('-total_quantity')
+   quantities = Commodities.objects.values('quality').annotate(total_quantity = Count('quality')).order_by('-total_quantity')
    # Get items grouped by level
-   level = Commodities.objects.values('level').annotate(total_level = Count('level'))
+   level = Commodities.objects.values('level').annotate(total_quantity = Count('level'))
+   # Get items grouped by class
+   item_class = Commodities.objects.values('item_class').annotate(total_quantity = Count('item_class')).order_by('-total_quantity')
    # Set up template data
    template = loader.get_template('distribution.html')
-   context = {'quantities': json.dumps(list(quantities)), 'level':json.dumps(list(level))}
+   context = {'quantities': json.dumps(list(quantities)), 'level': json.dumps(list(level)), 'class': json.dumps(list(item_class))}
    return HttpResponse(template.render(context, request))
 
 def profit(request):
