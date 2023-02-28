@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.template import loader
-from django.db.models import Count, Sum
-from .models import Commodities
+from django.db.models import Count, Sum, F
+from .models import Commodities, Auctions
 
 import json
 
@@ -16,11 +16,14 @@ def market(request):
    # Get the number of traded quantities
    quantity_counts = Commodities.objects.values('timestamp').annotate(count_quantities = Sum('quantity')).order_by('timestamp')
    quantity_counts_list = [quantity_count['count_quantities'] for quantity_count in quantity_counts]
+   # Get the total market revenue
+   revenue_counts = Auctions.objects.values('timestamp').annotate(count_revenues = Sum(F('quantity') * F('unit_price'))).order_by('timestamp')
+   revenue_counts_list = [revenue_count['count_revenues'] for revenue_count in revenue_counts]
    # Get a list of timestamps
    timestamp_list = [str(item_count['timestamp']) for item_count in item_counts]
    # Set up template data
    template = loader.get_template('market.html')
-   context = {'timestamp_list': json.dumps(timestamp_list), 'item_counts_list': json.dumps(item_counts_list), 'quantity_counts_list': json.dumps(quantity_counts_list)}
+   context = {'timestamp_list': json.dumps(timestamp_list), 'item_counts_list': json.dumps(item_counts_list), 'quantity_counts_list': json.dumps(quantity_counts_list), 'revenue_counts_list': revenue_counts_list}
    return HttpResponse(template.render(context, request))
 
 def distribution(request):

@@ -72,7 +72,7 @@
       datasets: [
         {
           data: quantities,
-          label: 'Traded volumes',
+          label: 'Traded Volumes',
           borderColor: '#E4C477',
           fill: true,
         },
@@ -85,5 +85,39 @@
     },
   });
 </script>
+
+<div class="row justify-content-center">
+   <div class="col-md-8">
+     <canvas id="revenues-chart" width="800" height="450"></canvas>
+   </div>
+ </div>
+ 
+ <!-- ### Total market revenue (views.py) ### -->
+ <!-- prettier-ignore -->
+ <script id="revenue-counts-list" type="application/json">{{revenue_counts_list}}</script>
+ 
+ <script>
+   const revenues = JSON.parse(document.getElementById('revenue-counts-list').textContent);
+ 
+   new Chart(document.getElementById('revenues-chart'), {
+     type: 'line',
+     data: {
+       labels: weekdays,
+       datasets: [
+         {
+           data: revenues,
+           label: 'Total Market Revenue',
+           borderColor: '#D87659',
+           fill: true,
+         },
+       ],
+     },
+     options: {
+       title: {
+         display: true,
+       },
+     },
+   });
+ </script>
 
 {% endblock %}
