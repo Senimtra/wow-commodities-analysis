@@ -133,4 +133,46 @@
   });
 </script>
 
+<div>
+  <canvas id="bar-chart-subclass" width="800" height="450"></canvas>
+</div>
+
+<!-- ### Item subclass / Item quantities (views.py) ### -->
+<!-- prettier-ignore -->
+<script id="subclass-list" type="application/json">{{subclass|safe}}</script>
+
+<!-- ### Item subclass distribution bar chart ### -->
+<script>
+  subclasses = JSON.parse(document.getElementById('subclass-list').textContent);
+
+  let item_subclass = [];
+  let item_subclass_quantity = [];
+  for (let i = 0; i < subclasses.length; i++) {
+    if (subclasses[i].item_subclass !== 'UNKNOWN') {
+      item_subclass.push(subclasses[i].item_subclass);
+      item_subclass_quantity.push(subclasses[i].total_quantity);
+    }
+  }
+
+  new Chart(document.getElementById('bar-chart-subclass'), {
+    type: 'bar',
+    data: {
+      labels: item_subclass,
+      datasets: [
+        {
+          label: 'Total Items per Sub-class',
+          backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
+          data: item_subclass_quantity,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+      },
+    },
+  });
+</script>
+
 {% endblock %}

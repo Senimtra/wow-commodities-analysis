@@ -27,9 +27,11 @@ def distribution(request):
    level = Commodities.objects.values('level').annotate(total_quantity = Count('level'))
    # Get items grouped by class
    item_class = Commodities.objects.values('item_class').annotate(total_quantity = Count('item_class')).order_by('-total_quantity')
+   # Get items grouped by subclass
+   item_subclass = Commodities.objects.values('item_subclass').annotate(total_quantity = Count('item_subclass'))
    # Set up template data
    template = loader.get_template('distribution.html')
-   context = {'quantities': json.dumps(list(quantities)), 'level': json.dumps(list(level)), 'class': json.dumps(list(item_class))}
+   context = {'quantities': json.dumps(list(quantities)), 'level': json.dumps(list(level)), 'class': json.dumps(list(item_class)), 'subclass': json.dumps(list(item_subclass))}
    return HttpResponse(template.render(context, request))
 
 def profit(request):
