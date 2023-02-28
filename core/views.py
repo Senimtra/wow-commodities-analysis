@@ -23,9 +23,11 @@ def market(request):
 def distribution(request):
    # Get items grouped by quality
    quantities = Commodities.objects.values('quality').annotate(total_quantity = Count('quantity')).order_by('-total_quantity')
+   # Get items grouped by level
+   level = Commodities.objects.values('level').annotate(total_level = Count('level'))
    # Set up template data
    template = loader.get_template('distribution.html')
-   context = {'quantities': json.dumps(list(quantities))}
+   context = {'quantities': json.dumps(list(quantities)), 'level':json.dumps(list(level))}
    return HttpResponse(template.render(context, request))
 
 def profit(request):

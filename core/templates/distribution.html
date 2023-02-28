@@ -10,34 +10,75 @@
 <p>Item distribution based on quality/level/class/subclass</p>
 
 <div>
-  <canvas id="bar-chart" width="800" height="450"></canvas>
+  <canvas id="bar-chart-quality" width="800" height="450"></canvas>
 </div>
 
 <!-- ### Item qualities / Item quantities (views.py) ### -->
 <!-- prettier-ignore -->
-<script id='quantities-list' type='application/json'>{{quantities|safe}}</script>
+<script id="quantities-list" type="application/json">{{quantities|safe}}</script>
 
 <!-- ### Item qualities distribution bar chart ### -->
 <script>
   qualities = JSON.parse(document.getElementById('quantities-list').textContent);
-  let quality = [];
-  let quantity = [];
+
+  let item_quality = [];
+  let item_quality_quantity = [];
   for (let i = 0; i < qualities.length; i++) {
     if (qualities[i].quality !== 'UNKNOWN') {
-      quality.push(qualities[i].quality);
-      quantity.push(qualities[i].total_quantity);
+      item_quality.push(qualities[i].quality);
+      item_quality_quantity.push(qualities[i].total_quantity);
     }
   }
 
-  new Chart(document.getElementById('bar-chart'), {
+  new Chart(document.getElementById('bar-chart-quality'), {
     type: 'bar',
     data: {
-      labels: quality,
+      labels: item_quality,
       datasets: [
         {
           label: 'Total Items per Quality',
           backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
-          data: quantity,
+          data: item_quality_quantity,
+        },
+      ],
+    },
+    options: {
+      legend: { display: false },
+      title: {
+        display: true,
+      },
+    },
+  });
+</script>
+
+<div>
+  <canvas id="bar-chart-level" width="800" height="450"></canvas>
+</div>
+
+<!-- ### Item level / Item quantities (views.py) ### -->
+<!-- prettier-ignore -->
+<script id="level-list" type="application/json">{{level|safe}}</script>
+
+<!-- ### Item level distribution pie chart ### -->
+<script>
+  level = JSON.parse(document.getElementById('level-list').textContent);
+  
+  let item_level = [];
+  let item_level_quantity = [];
+  for (let i = 1; i < level.length; i++) {
+    item_level.push(level[i].level);
+    item_level_quantity.push(level[i].total_level);
+  }
+
+  new Chart(document.getElementById('bar-chart-level'), {
+    type: 'bar',
+    data: {
+      labels: item_level,
+      datasets: [
+        {
+          label: 'Total Items per Level',
+          backgroundColor: ['#3e95cd', '#8e5ea2', '#3cba9f', '#e8c3b9', '#c45850'],
+          data: item_level_quantity,
         },
       ],
     },
