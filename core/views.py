@@ -55,7 +55,14 @@ def profit(request):
             item_id1['rank'] += item_id2['rank']
             break
    
-   items_ranked = sorted(items_ranked_quantity, key = lambda x: x['rank'])[:100]
+   items_ranked = sorted(items_ranked_quantity, key = lambda x: x['rank'])[:25]
+
+   for item in items_ranked:
+      item_id = item['item_id']
+      item_prices = Commodities.objects.filter(item_id = item_id).order_by('unit_price')
+      item['timestamp_min'] = item_prices[0].timestamp.strftime('%A %H')
+      item['timestamp_max'] = item_prices.reverse()[0].timestamp.strftime('%A %H')
+
    template = loader.get_template('profit.html')
    context = {'items_ranked': items_ranked}
    return HttpResponse(template.render(context, request))

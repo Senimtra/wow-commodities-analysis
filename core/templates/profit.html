@@ -8,12 +8,17 @@
 <p>Most profitable items and when to buy/sell them</p>
 
 <table>
+  <tr>
+    <th></th>
+    <th>Image</th>
+    <th>Name</th>
+    <th>Quantities</th>
+    <th>Price Range</th>
+    <th>Rank</th>
+    <th>Buy</th>
+    <th>Sell</th>
+  </tr>
   {% for x in items_ranked %}
-  <!-- prettier-ignore -->
-  {% for key in dictionary.keys %}
-  Key name: {{ key }}</th>
-  {% endfor %}
-
   <tr>
     <td><img src="{{x.link}}" /></td>
     <td>{{x.item_id}}</td>
@@ -21,7 +26,10 @@
     <td>{{x.total_quantity}}</td>
     <td>{{x.price_range}}</td>
     <td>{{x.rank}}</td>
+    <td>{{x.timestamp_min}}</td>
+    <td>{{x.timestamp_max}}</td>
   </tr>
   {% endfor %}
 </table>
+
 {% endblock %}
