@@ -6,4 +6,22 @@
 {% block content %}
 <h1>Profitable Items</h1>
 <p>Most profitable items and when to buy/sell them</p>
+
+<table>
+  {% for x in items_ranked %}
+  <!-- prettier-ignore -->
+  {% for key in dictionary.keys %}
+  Key name: {{ key }}</th>
+  {% endfor %}
+
+  <tr>
+    <td><img src="{{x.link}}" /></td>
+    <td>{{x.item_id}}</td>
+    <td>{{x.name}}</td>
+    <td>{{x.total_quantity}}</td>
+    <td>{{x.price_range}}</td>
+    <td>{{x.rank}}</td>
+  </tr>
+  {% endfor %}
+</table>
 {% endblock %}

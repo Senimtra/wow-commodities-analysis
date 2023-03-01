@@ -1,8 +1,9 @@
+# Imports
 from django.http import HttpResponse
 from django.template import loader
-from django.db.models import Count, Sum, F
+from django.db.models import Count, Sum, F, Window, Max, Min
+from django.db.models.functions import Rank
 from .models import Commodities, Auctions
-
 import json
 
 def home(request):
@@ -41,8 +42,23 @@ def distribution(request):
    return HttpResponse(template.render(context, request))
 
 def profit(request):
+
+   items_ranked_quantity = (Commodities.objects.values('item_id', 'link', 'name').annotate(total_quantity = Sum('quantity')).order_by('-total_quantity')
+    .annotate(rank = Window(expression = Rank(), order_by = F('total_quantity').desc())))
+   items_ranked_pricerange = Commodities.objects.values('item_id').annotate(price_diff = Max('unit_price') - Min('unit_price')).order_by('-price_diff')
+   items_ranked_pricerange = items_ranked_pricerange.annotate(rank = Window(expression = Rank(), order_by = F ('price_diff').desc()))
+
+   for item_id1 in items_ranked_quantity:
+      for item_id2 in items_ranked_pricerange:
+         if item_id1['item_id'] == item_id2['item_id']:
+            item_id1['price_range'] = item_id2['price_diff']
+            item_id1['rank'] += item_id2['rank']
+            break
+   
+   items_ranked = sorted(items_ranked_quantity, key = lambda x: x['rank'])[:100]
    template = loader.get_template('profit.html')
-   return HttpResponse(template.render())
+   context = {'items_ranked': items_ranked}
+   return HttpResponse(template.render(context, request))
 
 def data(request):
    template = loader.get_template('data.html')
