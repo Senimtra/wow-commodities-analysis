@@ -57,14 +57,6 @@ def profit(request):
    
    items_ranked = sorted(items_ranked_quantity, key = lambda x: x['rank'])[:18]
 
-   print(items_ranked[:1])
-
-   # for item in items_ranked:
-   #    item_id = item['item_id']
-   #    item_prices = Commodities.objects.filter(item_id = item_id).order_by('unit_price')
-   #    item['timestamp_min'] = item_prices[0].timestamp.strftime('%A %H')
-   #    item['timestamp_max'] = item_prices.reverse()[0].timestamp.strftime('%A %H')
-
    template = loader.get_template('profit.html')
    context = {'items_ranked': items_ranked}
    return HttpResponse(template.render(context, request))
@@ -76,8 +68,23 @@ def details(request, item_id):
    rank = request.POST.get('rank')
    comb_rank = request.POST.get('comb_rank')
    profit = request.POST.get('profit')
+
+   item_prices = Commodities.objects.filter(item_id = item_id).order_by('unit_price')
+   
+   buy_point = item_prices[0].timestamp.strftime('%A %H')
+   sell_point = item_prices.reverse()[0].timestamp.strftime('%A %H')
+
+   enriched = Commodities.objects.filter(item_id = item_id).order_by('-timestamp').first()
+
+   last_price = enriched.unit_price
+   quality = enriched.quality
+   level = enriched.level
+   item_class = enriched.item_class
+   item_subclass = enriched.item_subclass
+   description = enriched.description
+
    template = loader.get_template('details.html')
-   context = {'item_id': item_id, 'link': link, 'name': name, 'quantity': quantity, 'rank': rank, 'comb_rank': comb_rank, 'profit': profit}
+   context = {'item_id': item_id, 'link': link, 'name': name, 'quantity': quantity, 'rank': rank, 'comb_rank': comb_rank, 'profit': profit, 'last_price': last_price, 'quality': quality, 'level': level, 'item_class': item_class, 'item_subclass': item_subclass, 'description': description, 'buy_point': buy_point, 'sell_point': sell_point}
    return HttpResponse(template.render(context, request))
 
 def data(request):
