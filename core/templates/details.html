@@ -5,6 +5,9 @@
 
 {% block content %}
 
+<!-- ### Include Chart.js CDN ### -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <h1>DETAILS</h1>
 <p>ITEM_ID {{item_id}}</p>
 <p>ITEM_LINK {{link</p>
@@ -13,7 +16,7 @@
 <p>ITEM_RANK {{rank}}</p>
 <p>ITEM_COMB_RANK {{comb_rank}}</p>
 <p>ITEM_POTENTIAL_PROFIT {{profit}}</p>
-<p>ITEM_LAST_PRICE {{last_price}}</p>
+<p>ITEM_AVG_PRICE {{avg_price}}</p>
 <p>ITEM_QUALITY {{quality}}</p>
 <p>ITEM_LEVEL {{level}}</p>
 <p>ITEM_CLASS {{item_class}}</p>
@@ -21,5 +24,42 @@
 <p>ITEM_DESCRIPTION {{description}}</p>
 <p>ITEM_BUY_POINT {{buy_point}}</p>
 <p>ITEM_SELL_POINT {{sell_point}}</p>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <canvas id="details-chart" width="1800" height="850"></canvas>
+  </div>
+</div>
+
+<!-- ### Unique chart timestamps / Item prices (views.py) ### -->
+<!-- prettier-ignore -->
+<script id="chart_timestamps" type="application/json">{{chart_timestamps|safe}}</script>
+<!-- prettier-ignore -->
+<script id="chart_prices" type="application/json">{{chart_prices|safe}}</script>
+
+<script>
+  const chart_timestamps = JSON.parse(document.getElementById('chart_timestamps').textContent);
+  const chart_prices = JSON.parse(document.getElementById('chart_prices').textContent);
+
+  new Chart(document.getElementById('details-chart'), {
+    type: 'line',
+    data: {
+      labels: chart_timestamps,
+      datasets: [
+        {
+          data: chart_prices,
+          label: 'Unit Price',
+          borderColor: '#3e95cd',
+          fill: true,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+      },
+    },
+  });
+</script>
 
 {% endblock %}

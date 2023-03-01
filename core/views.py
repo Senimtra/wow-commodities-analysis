@@ -1,7 +1,7 @@
 # Imports
 from django.http import HttpResponse
 from django.template import loader
-from django.db.models import Count, Sum, F, Window, Max, Min
+from django.db.models import Count, Sum, F, Avg, Window, Max, Min
 from django.db.models.functions import Rank
 from .models import Commodities, Auctions
 import json
@@ -43,9 +43,9 @@ def distribution(request):
 
 def profit(request):
 
-   items_ranked_quantity = (Commodities.objects.values('item_id', 'link', 'name').annotate(total_quantity = Sum('quantity')).order_by('-total_quantity')
+   items_ranked_quantity = (Commodities.objects.exclude(item_subclass='Junk').values('item_id', 'link', 'name').annotate(total_quantity = Sum('quantity') / 168).order_by('-total_quantity')
     .annotate(rank = Window(expression = Rank(), order_by = F('total_quantity').desc())))
-   items_ranked_pricerange = Commodities.objects.values('item_id').annotate(profit = Max('unit_price') - Min('unit_price')).order_by('-profit')
+   items_ranked_pricerange = Commodities.objects.exclude(item_subclass='Junk').values('item_id').annotate(profit = (Max('unit_price') - Min('unit_price')) / 100).order_by('-profit')
    items_ranked_pricerange = items_ranked_pricerange.annotate(rank = Window(expression = Rank(), order_by = F ('profit').desc()))
 
    for item_id1 in items_ranked_quantity:
@@ -74,17 +74,21 @@ def details(request, item_id):
    buy_point = item_prices[0].timestamp.strftime('%A %H')
    sell_point = item_prices.reverse()[0].timestamp.strftime('%A %H')
 
-   enriched = Commodities.objects.filter(item_id = item_id).order_by('-timestamp').first()
+   enriched = Commodities.objects.filter(item_id = item_id).annotate(avg_price = Avg('unit_price') / 100).values('item_id', 'quantity', 'unit_price', 'timestamp', 'name', 'quality', 'level', 'item_class', 'item_subclass', 'description', 'media', 'link', 'avg_price').first()
 
-   last_price = enriched.unit_price
-   quality = enriched.quality
-   level = enriched.level
-   item_class = enriched.item_class
-   item_subclass = enriched.item_subclass
-   description = enriched.description
+   avg_price = int(enriched['avg_price'])
+   quality = enriched['quality']
+   level = enriched['level']
+   item_class = enriched['item_class']
+   item_subclass = enriched['item_subclass']
+   description = enriched['description']
+
+   chart = Commodities.objects.filter(item_id = item_id).values('unit_price', 'timestamp').order_by('timestamp')
+   chart_timestamps = [obj['timestamp'].strftime('%A') for obj in chart]
+   chart_prices = [int(obj['unit_price'] / 100) for obj in chart]
 
    template = loader.get_template('details.html')
-   context = {'item_id': item_id, 'link': link, 'name': name, 'quantity': quantity, 'rank': rank, 'comb_rank': comb_rank, 'profit': profit, 'last_price': last_price, 'quality': quality, 'level': level, 'item_class': item_class, 'item_subclass': item_subclass, 'description': description, 'buy_point': buy_point, 'sell_point': sell_point}
+   context = {'item_id': item_id, 'link': link, 'name': name, 'quantity': quantity, 'rank': rank, 'comb_rank': comb_rank, 'profit': profit, 'avg_price': avg_price, 'quality': quality, 'level': level, 'item_class': item_class, 'item_subclass': item_subclass, 'description': description, 'buy_point': buy_point, 'sell_point': sell_point, 'chart_timestamps': json.dumps(chart_timestamps), 'chart_prices': json.dumps(chart_prices)}
    return HttpResponse(template.render(context, request))
 
 def data(request):
