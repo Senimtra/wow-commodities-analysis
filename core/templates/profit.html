@@ -7,29 +7,38 @@
 <h1>Profitable Items</h1>
 <p>Most profitable items and when to buy/sell them</p>
 
-<table>
-  <tr>
-    <th></th>
-    <th>Image</th>
-    <th>Name</th>
-    <th>Quantities</th>
-    <th>Price Range</th>
-    <th>Rank</th>
-    <th>Buy</th>
-    <th>Sell</th>
-  </tr>
-  {% for x in items_ranked %}
-  <tr>
-    <td><img src="{{x.link}}" /></td>
-    <td>{{x.item_id}}</td>
-    <td>{{x.name}}</td>
-    <td>{{x.total_quantity}}</td>
-    <td>{{x.price_range}}</td>
-    <td>{{x.rank}}</td>
-    <td>{{x.timestamp_min}}</td>
-    <td>{{x.timestamp_max}}</td>
-  </tr>
-  {% endfor %}
-</table>
+<div class="container">
+  <div class="row">
+    {% for item in items_ranked %}
+    <div class="col-lg-4 col-md-6 mb-3">
+      <div class="card">
+        <div class="row g-0">
+          <div class="col-md-3">
+            <img src="{{item.link}}" class="img-fluid rounded-start" alt="{{item.name}}" />
+            <form method="post" action="{% url 'details' item_id=item.item_id %}">
+              {% csrf_token %}
+              <input type="hidden" name="link" value="{{item.link}}" />
+              <input type="hidden" name="name" value="{{item.name}}" />
+              <input type="hidden" name="quantity" value="{{item.total_quantity}}" />
+              <input type="hidden" name="rank" value="{{forloop.counter}}" />
+              <input type="hidden" name="comb_rank" value="{{item.rank}}" />
+              <input type="hidden" name="profit" value="{{item.profit}}" />
+              <button class="btn btn-sm btn-primary" type="submit">Details</button>
+            </form>
+          </div>
+          <div class="col-md-9">
+            <div class="card-body">
+              <h5 class="card-title">{{item.name}}</h5>
+              <div>Quantity: {{item.total_quantity}}</div>
+              <div>Potential Profit: {{item.profit}}</div>
+              <p class="card-text"><small class="text-muted">ID: {{item.item_id}}&nbsp;&nbsp; Comb: {{item.rank}}&nbsp;&nbsp; Rank: {{forloop.counter}}</small></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
 
 {% endblock %}
