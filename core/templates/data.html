@@ -1,9 +1,18 @@
 <!-- prettier-ignore -->
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}Data Status{% endblock %}
 
 {% block content %}
 <h1>Data Status</h1>
 <p>Database status and data integrity</p>
+
+<h3>{{database_status}}</h3>
+
+<img src="{% static 'images/ER_diagram.png' %}" width="450" />
+
+<h3>Database rows: {{rows_count}}</h3>
+
 {% endblock %}

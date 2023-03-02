@@ -3,7 +3,12 @@ from django.http import HttpResponse
 from django.template import loader
 from django.db.models import Count, Sum, F, Avg, Window, Max, Min
 from django.db.models.functions import Rank
-from .models import Commodities, Auctions
+from django.apps import apps
+
+from .models import Commodities, Auctions, ItemsData, ItemsMedia
+
+from functions import database
+
 import json
 
 def home(request):
@@ -92,5 +97,7 @@ def details(request, item_id):
    return HttpResponse(template.render(context, request))
 
 def data(request):
+   rows_count = sum([x.objects.values('id').count() for x in [Commodities, Auctions, ItemsData, ItemsMedia]])
    template = loader.get_template('data.html')
-   return HttpResponse(template.render())
+   context = {'database_status': database.status(), 'rows_count': rows_count}
+   return HttpResponse(template.render(context, request))
