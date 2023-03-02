@@ -1,0 +1,47 @@
+/* ### General Styles ### */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url("/static/images/background.jpg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  margin: 0;
+  padding: 0;
+  color: white;
+}
+
+/* ### Navbar Styles ### */
+.navbar {
+  background-color: rgba(0, 0, 0, 0.6039215686);
+  width: 100% !important;
+  position: fixed !important;
+  border-radius: 0.3rem;
+}
+.navbar a {
+  color: white;
+}
+
+/* ### General Styles ### */
+.content-container {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  overflow-y: auto;
+  height: 100vh;
+  margin-top: 8rem;
+  background-color: rgba(0, 0, 0, 0.6039215686);
+}
+
+.content-container::-webkit-scrollbar {
+  display: none;
+}
+
+.content {
+  height: 100vh; /* set a fixed height for the content */
+  margin-bottom: 200px;
+}

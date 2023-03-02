@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,11 +10,14 @@
 
     <!-- ### Include Bootstrap CSS ### -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+
+    <!-- ### Include CSS file ### -->
+    <link rel="stylesheet" href="{% static 'styles/css/styles.css' %}" />
   </head>
 
   <body>
     <!-- ### Navbar ### -->
-    <nav class="navbar navbar-expand-md navbar-light bg-dark">
+    <nav class="navbar container navbar-expand-md navbar-toggleable-sm fixed-top mt-lg-4 mt-md-5">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -41,9 +45,11 @@
         </ul>
       </div>
     </nav>
-    <div class="container-fluid">
-      <!-- ## Child template content ## -->
-      {% block content %} {% endblock %}
+    <div class="container content-container">
+      <div class="content">
+        <!-- ## Child template content ## -->
+        {% block content %} {% endblock %}
+      </div>
     </div>
 
     <!-- ### Include Bootstrap JavaScript Bundle + Popper ### -->
