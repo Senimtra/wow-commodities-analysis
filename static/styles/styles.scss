@@ -2,7 +2,6 @@
 
 @import 'home.css';
 
-
 /* ### General styles ### */
 
 * {
@@ -31,12 +30,11 @@ body {
   height: 100vh;
 }
 
-
 /* ### Navbar styles ### */
 
 .navbar {
   background-color: #0000009a;
-
+  font-size: 1.2rem;
   width: 100% !important;
   position: fixed !important;
   padding: 1rem 2rem;
@@ -45,7 +43,6 @@ body {
     color: white;
   }
 }
-
 
 /* ### Content styles ### */
 
@@ -69,7 +66,6 @@ body {
 .content-container::-webkit-scrollbar {
   display: none;
 }
-
 
 /* ### Media Queries ### */
 

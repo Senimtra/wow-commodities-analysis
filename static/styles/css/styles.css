@@ -30,6 +30,7 @@ body {
 /* ### Navbar styles ### */
 .navbar {
   background-color: rgba(0, 0, 0, 0.6039215686);
+  font-size: 1.2rem;
   width: 100% !important;
   position: fixed !important;
   padding: 1rem 2rem;

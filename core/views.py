@@ -21,7 +21,7 @@ def market(request):
    quantity_counts = Commodities.objects.values('timestamp').annotate(count_quantities = Sum('quantity')).order_by('timestamp')
    quantity_counts_list = [quantity_count['count_quantities'] for quantity_count in quantity_counts]
    # Get the total market revenue
-   revenue_counts = Auctions.objects.values('timestamp').annotate(count_revenues = Sum(F('quantity') * F('unit_price'))).order_by('timestamp')
+   revenue_counts = Auctions.objects.values('timestamp').annotate(count_revenues = Sum(F('quantity') * F('unit_price')) / 10000).order_by('timestamp')
    revenue_counts_list = [revenue_count['count_revenues'] for revenue_count in revenue_counts]
    # Get a list of timestamps
    timestamp_list = [str(item_count['timestamp']) for item_count in item_counts]

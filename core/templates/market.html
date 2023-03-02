@@ -9,115 +9,126 @@
 <h1>Market Analysis</h1>
 <p>World of Warcraft Commodities Analysis</p>
 
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <canvas id="items-chart" width="800" height="450"></canvas>
+<div class="container">
+  <div class="row">
+    <div class="col-home-text col-lg-6 col-md-12">
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+    </div>
+    <div class="col-home-chart col-lg-6 col-md-12">
+      <canvas id="items-chart" width="800" height="450"></canvas>
+
+      <!-- ### Unique timestamps / Available unique items (views.py) ### -->
+      <!-- prettier-ignore -->
+      <script id="timestamp-list" type="application/json">{{timestamp_list|safe}}</script>
+      <!-- prettier-ignore -->
+      <script id="item-counts-list" type="application/json">{{item_counts_list}}</script>
+
+      <script>
+        const timestamps = JSON.parse(document.getElementById('timestamp-list').textContent);
+        const items = JSON.parse(document.getElementById('item-counts-list').textContent);
+
+        const weekdays = timestamps.map((timestamp) => {
+          const date = new Date(timestamp);
+          const options = { weekday: 'long' };
+          return date.toLocaleDateString('en-US', options);
+        });
+
+        new Chart(document.getElementById('items-chart'), {
+          type: 'line',
+          data: {
+            labels: weekdays,
+            datasets: [
+              {
+                data: items,
+                label: 'Available unique Items',
+                borderColor: '#3e95cd',
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            title: {
+              display: true,
+            },
+          },
+        });
+      </script>
+    </div>
+    <div class="col-home-text col-lg-6 col-md-12">
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+    </div>
+    <div class="col-home-chart col-lg-6 col-md-12">
+      <canvas id="quantities-chart" width="800" height="450"></canvas>
+
+      <!-- ### Traded quantities (views.py) ### -->
+      <!-- prettier-ignore -->
+      <script id="quantity-counts-list" type="application/json">{{quantity_counts_list}}</script>
+
+      <script>
+        const quantities = JSON.parse(document.getElementById('quantity-counts-list').textContent);
+
+        new Chart(document.getElementById('quantities-chart'), {
+          type: 'line',
+          data: {
+            labels: weekdays,
+            datasets: [
+              {
+                data: quantities,
+                label: 'Traded Volumes',
+                borderColor: '#E4C477',
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            title: {
+              display: true,
+            },
+          },
+        });
+      </script>
+    </div>
+    <div class="col-home-text col-lg-6 col-md-12">
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+    </div>
+    <div class="col-home-chart col-lg-6 col-md-12">
+      <canvas id="revenues-chart" width="800" height="450"></canvas>
+
+      <!-- ### Total market revenue (views.py) ### -->
+      <!-- prettier-ignore -->
+      <script id="revenue-counts-list" type="application/json">{{revenue_counts_list}}</script>
+
+      <script>
+        const revenues = JSON.parse(document.getElementById('revenue-counts-list').textContent);
+
+        new Chart(document.getElementById('revenues-chart'), {
+          type: 'line',
+          data: {
+            labels: weekdays,
+            datasets: [
+              {
+                data: revenues,
+                label: 'Total Market Revenue',
+                borderColor: '#D87659',
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            title: {
+              display: true,
+            },
+          },
+        });
+      </script>
+    </div>
   </div>
 </div>
-
-<!-- ### Unique timestamps / Available unique items (views.py) ### -->
-<!-- prettier-ignore -->
-<script id="timestamp-list" type="application/json">{{timestamp_list|safe}}</script>
-<!-- prettier-ignore -->
-<script id="item-counts-list" type="application/json">{{item_counts_list}}</script>
-
-<script>
-  const timestamps = JSON.parse(document.getElementById('timestamp-list').textContent);
-  const items = JSON.parse(document.getElementById('item-counts-list').textContent);
-
-  const weekdays = timestamps.map((timestamp) => {
-    const date = new Date(timestamp);
-    const options = { weekday: 'long' };
-    return date.toLocaleDateString('en-US', options);
-  });
-
-  new Chart(document.getElementById('items-chart'), {
-    type: 'line',
-    data: {
-      labels: weekdays,
-      datasets: [
-        {
-          data: items,
-          label: 'Available unique Items',
-          borderColor: '#3e95cd',
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      title: {
-        display: true,
-      },
-    },
-  });
-</script>
-
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <canvas id="quantities-chart" width="800" height="450"></canvas>
-  </div>
-</div>
-
-<!-- ### Traded quantities (views.py) ### -->
-<!-- prettier-ignore -->
-<script id="quantity-counts-list" type="application/json">{{quantity_counts_list}}</script>
-
-<script>
-  const quantities = JSON.parse(document.getElementById('quantity-counts-list').textContent);
-
-  new Chart(document.getElementById('quantities-chart'), {
-    type: 'line',
-    data: {
-      labels: weekdays,
-      datasets: [
-        {
-          data: quantities,
-          label: 'Traded Volumes',
-          borderColor: '#E4C477',
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      title: {
-        display: true,
-      },
-    },
-  });
-</script>
-
-<div class="row justify-content-center">
-   <div class="col-md-8">
-     <canvas id="revenues-chart" width="800" height="450"></canvas>
-   </div>
- </div>
- 
- <!-- ### Total market revenue (views.py) ### -->
- <!-- prettier-ignore -->
- <script id="revenue-counts-list" type="application/json">{{revenue_counts_list}}</script>
- 
- <script>
-   const revenues = JSON.parse(document.getElementById('revenue-counts-list').textContent);
- 
-   new Chart(document.getElementById('revenues-chart'), {
-     type: 'line',
-     data: {
-       labels: weekdays,
-       datasets: [
-         {
-           data: revenues,
-           label: 'Total Market Revenue',
-           borderColor: '#D87659',
-           fill: true,
-         },
-       ],
-     },
-     options: {
-       title: {
-         display: true,
-       },
-     },
-   });
- </script>
 
 {% endblock %}
