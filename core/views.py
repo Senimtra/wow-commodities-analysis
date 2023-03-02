@@ -3,10 +3,8 @@ from django.http import HttpResponse
 from django.template import loader
 from django.db.models import Count, Sum, F, Avg, Window, Max, Min
 from django.db.models.functions import Rank
-from django.apps import apps
-
+from scipy.signal import savgol_filter
 from .models import Commodities, Auctions, ItemsData, ItemsMedia
-
 from functions import database
 
 import json
@@ -74,11 +72,6 @@ def details(request, item_id):
    comb_rank = request.POST.get('comb_rank')
    profit = request.POST.get('profit')
 
-   item_prices = Commodities.objects.filter(item_id = item_id).order_by('unit_price')
-   
-   buy_point = item_prices[0].timestamp.strftime('%A %H')
-   sell_point = item_prices.reverse()[0].timestamp.strftime('%A %H')
-
    enriched = Commodities.objects.filter(item_id = item_id).annotate(avg_price = Avg('unit_price') / 100).values('item_id', 'quantity', 'unit_price', 'timestamp', 'name', 'quality', 'level', 'item_class', 'item_subclass', 'description', 'media', 'link', 'avg_price').first()
 
    avg_price = int(enriched['avg_price'])
@@ -89,11 +82,15 @@ def details(request, item_id):
    description = enriched['description']
 
    chart = Commodities.objects.filter(item_id = item_id).values('unit_price', 'timestamp').order_by('timestamp')
-   chart_timestamps = [obj['timestamp'].strftime('%A') for obj in chart]
-   chart_prices = [int(obj['unit_price'] / 100) for obj in chart]
+   chart_prices = savgol_filter([int(obj['unit_price'] / 100) for obj in chart], window_length = 12, polyorder = 2)
+   chart_timestamps = [obj['timestamp'].strftime('%A %H') for obj in chart]
+
+   buy_sell_point = list(zip(chart_prices, chart_timestamps))
+   buy_point = f'{min(buy_sell_point, key=lambda x: x[0])[1]}:00'
+   sell_point = f'{max(buy_sell_point, key=lambda x: x[0])[1]}:00'
 
    template = loader.get_template('details.html')
-   context = {'item_id': item_id, 'link': link, 'name': name, 'quantity': quantity, 'rank': rank, 'comb_rank': comb_rank, 'profit': profit, 'avg_price': avg_price, 'quality': quality, 'level': level, 'item_class': item_class, 'item_subclass': item_subclass, 'description': description, 'buy_point': buy_point, 'sell_point': sell_point, 'chart_timestamps': json.dumps(chart_timestamps), 'chart_prices': json.dumps(chart_prices)}
+   context = {'item_id': item_id, 'link': link, 'name': name, 'quantity': quantity, 'rank': rank, 'comb_rank': comb_rank, 'profit': profit, 'avg_price': avg_price, 'quality': quality, 'level': level, 'item_class': item_class, 'item_subclass': item_subclass, 'description': description, 'buy_point': buy_point, 'sell_point': sell_point, 'chart_timestamps': json.dumps(chart_timestamps), 'chart_prices': json.dumps(list(chart_prices))}
    return HttpResponse(template.render(context, request))
 
 def data(request):
