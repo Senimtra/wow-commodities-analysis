@@ -1,65 +1,81 @@
 <!-- prettier-ignore -->
 {% extends "base.html" %}
-
 {% block title %}Item Details{% endblock %}
-
 {% block content %}
 
 <!-- ### Include Chart.js CDN ### -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<h1>DETAILS</h1>
-<p>ITEM_ID {{item_id}}</p>
-<p>ITEM_LINK {{link}}</p>
-<p>ITEM_NAME {{name}}</p>
-<p>ITEM_QUANTITY {{quantity}}</p>
-<p>ITEM_RANK {{rank}}</p>
-<p>ITEM_COMB_RANK {{comb_rank}}</p>
-<p>ITEM_POTENTIAL_PROFIT {{profit}}</p>
-<p>ITEM_AVG_PRICE {{avg_price}}</p>
-<p>ITEM_QUALITY {{quality}}</p>
-<p>ITEM_LEVEL {{level}}</p>
-<p>ITEM_CLASS {{item_class}}</p>
-<p>ITEM_SUBCLASS {{item_subclass}}</p>
-<p>ITEM_DESCRIPTION {{description}}</p>
-<p>ITEM_BUY_POINT {{buy_point}}</p>
-<p>ITEM_SELL_POINT {{sell_point}}</p>
+<h1>Item Details</h1>
+<p>Buy-Sell Recommendation and Price Chart</p>
 
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <canvas id="details-chart" width="1800" height="850"></canvas>
+<div class="container">
+  <div class="row">
+    <div class="col-details col-12 col-lg-6 d-flex flex-column">
+      <div class="card card-details mb-3 flex-grow-1">
+        <div class="row g-0">
+          <div class="col-details-img col-md-4 flex-column d-flex flex-column justify-content-between justify-content-md-start">
+            <img src="{{link}}" class="img-fluid rounded-start" alt="{{name}}" />
+            <div class="buy">BUY: {{buy_point}}</div>
+            <div class="sell">SELL: {{sell_point}}</div>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{name}}</h5>
+              <p class="card-text">{{description}}</p>
+              <div>Quantity: {{quantity}}</div>
+              <div>Average Price: {{avg_price}}</div>
+              <div>Potential Profit: {{profit}}</div>
+              <div>Item Class: {{item_class}}</div>
+              <div>Item Subclass: {{item_subclass}}</div>
+              <p class="card-text small-details">
+                <small class="text-muted">ID: {{item_id}}&nbsp;&nbsp; Item Quality: {{quality}}&nbsp;&nbsp; Item Level: {{level}}<br />Combined: {{comb_rank}}&nbsp;&nbsp; Rank: {{rank}}</small>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-details col-12 col-lg-6 d-flex flex-column">
+      <div class="flex-grow-1">
+        <canvas id="details-chart" width="800" height="450"></canvas>
+        <div class="back-btn">
+          <a class="btn btn-back btn-dark" href="{% url 'profit' %}">Profitable Items</a>
+        </div>
+      </div>
+
+      <!-- ### Unique chart timestamps / Item prices (views.py) ### -->
+      <!-- prettier-ignore -->
+      <script id="chart_timestamps" type="application/json">{{chart_timestamps|safe}}</script>
+      <!-- prettier-ignore -->
+      <script id="chart_prices" type="application/json">{{chart_prices|safe}}</script>
+
+      <script>
+        const chart_timestamps = JSON.parse(document.getElementById('chart_timestamps').textContent);
+        const chart_prices = JSON.parse(document.getElementById('chart_prices').textContent);
+
+        new Chart(document.getElementById('details-chart'), {
+          type: 'line',
+          data: {
+            labels: chart_timestamps,
+            datasets: [
+              {
+                data: chart_prices,
+                label: 'Unit Price',
+                borderColor: '#3e95cd',
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            title: {
+              display: true,
+            },
+          },
+        });
+      </script>
+    </div>
   </div>
 </div>
-
-<!-- ### Unique chart timestamps / Item prices (views.py) ### -->
-<!-- prettier-ignore -->
-<script id="chart_timestamps" type="application/json">{{chart_timestamps|safe}}</script>
-<!-- prettier-ignore -->
-<script id="chart_prices" type="application/json">{{chart_prices|safe}}</script>
-
-<script>
-  const chart_timestamps = JSON.parse(document.getElementById('chart_timestamps').textContent);
-  const chart_prices = JSON.parse(document.getElementById('chart_prices').textContent);
-
-  new Chart(document.getElementById('details-chart'), {
-    type: 'line',
-    data: {
-      labels: chart_timestamps,
-      datasets: [
-        {
-          data: chart_prices,
-          label: 'Unit Price',
-          borderColor: '#3e95cd',
-          fill: true,
-        },
-      ],
-    },
-    options: {
-      title: {
-        display: true,
-      },
-    },
-  });
-</script>
 
 {% endblock %}

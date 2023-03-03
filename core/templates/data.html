@@ -1,18 +1,37 @@
 <!-- prettier-ignore -->
 {% extends "base.html" %}
-
-{% load static %}
-
 {% block title %}Data Status{% endblock %}
-
+{% load static %}
 {% block content %}
+
 <h1>Data Status</h1>
-<p>Database status and data integrity</p>
+<p>Database Status and Data Integrity</p>
 
-<h3>{{database_status}}</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-data col-md-12 col-lg-5">
 
-<img src="{% static 'images/ER_diagram.png' %}" width="450" />
+        <h3>{{database_status}}</h3>
+        <table>
+          <tr>
+            <th>Table</th>
+            <th>Rows</th>
+          </tr>
+          {% for table in tables_rows %}
+          <tr>
+            <td>{{table.0}}</td>
+            <td>{{table.1}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+        <h4>Total rows:&nbsp;&nbsp; {{total_rows}}</h4>
 
-<h3>Database rows: {{rows_count}}</h3>
+        <a href="#">
+          <div class="card aws-card"></div>
+        </a>
+    </div>
+    <div class="diagram col-data col-md-12 col-lg-7"><img src="{% static 'images/ER_diagram.png' %}" width="450" /></div>
+  </div>
+</div>
 
 {% endblock %}

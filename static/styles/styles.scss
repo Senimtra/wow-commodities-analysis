@@ -3,6 +3,8 @@
 @import 'home.css';
 @import 'distribution.css';
 @import 'profit.css';
+@import 'details.css';
+@import 'data.css';
 
 /* ### General styles ### */
 
@@ -55,7 +57,7 @@ body {
   transform: translateX(-50%);
   background-color: #000000d0;
   border-radius: 0.3rem;
-  overflow-y: auto; /* add vertical scrolling to the parent container */
+  overflow-y: auto;
   border-top: 2.5rem solid rgba(0, 0, 255, 0);
   border-bottom: 2.5rem solid rgba(0, 0, 255, 0);
 }
@@ -79,8 +81,6 @@ body {
   .navbar {
     margin-top: 3.5rem;
   }
-  .content {
-  }
 }
 
 @media (min-width: 992px) {
@@ -90,7 +90,5 @@ body {
   }
   .navbar {
     margin-top: 2.5rem;
-  }
-  .content {
   }
 }

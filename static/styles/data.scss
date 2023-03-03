@@ -1,0 +1,30 @@
+/* ### Data styles ### */
+
+.col-data {
+  padding: 2rem;
+  table {
+    margin: 2rem 0;
+  }
+}
+
+td,
+th {
+  padding-left: 1.5rem;
+}
+
+.aws-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 10rem;
+  height: 2rem;
+  background-image: url('/static/images/aws.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  margin-top: 2rem;
+}
+
+.diagram img {
+  border-radius: 0.3rem;
+}

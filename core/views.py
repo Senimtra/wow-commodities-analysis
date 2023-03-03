@@ -3,11 +3,12 @@ from django.http import HttpResponse
 from django.template import loader
 from django.db.models import Count, Sum, F, Avg, Window, Max, Min
 from django.db.models.functions import Rank
+from django.db import connection
 from scipy.signal import savgol_filter
-from .models import Commodities, Auctions, ItemsData, ItemsMedia
 from functions import database
-
+from .models import Commodities, Auctions
 import json
+import re
 
 def home(request):
    template = loader.get_template('home.html')
@@ -94,7 +95,11 @@ def details(request, item_id):
    return HttpResponse(template.render(context, request))
 
 def data(request):
-   rows_count = sum([x.objects.values('id').count() for x in [Commodities, Auctions, ItemsData, ItemsMedia]])
+   with connection.cursor() as cursor:
+      cursor.execute("SELECT relname, n_live_tup FROM pg_stat_user_tables ORDER BY n_live_tup DESC")
+      results = cursor.fetchall()
+   tables_rows = [(result[0][5:], result[1]) for result in results if 'core_' in result[0]]
+   total_rows = '.'.join(re.findall(r'\d{1,3}(?=(?:\d{3})+$)|\d{1,3}$', str(sum([rows[1] for rows in tables_rows]))))
    template = loader.get_template('data.html')
-   context = {'database_status': database.status(), 'rows_count': rows_count}
+   context = {'database_status': database.status(), 'tables_rows': tables_rows, 'total_rows': total_rows}
    return HttpResponse(template.render(context, request))

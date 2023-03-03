@@ -1,0 +1,61 @@
+/* ### Details styles ### */
+
+.col-details {
+  padding: 2rem;
+}
+
+.card-details {
+  background-image: url('/static/images/parchment.jpg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border-radius: 0.3rem;
+  border: 1px solid black;
+}
+
+.col-details-img {
+  padding: 1.2rem 0.3rem 0 1.2rem;
+  img {
+    width: 100%;
+    border-top-left-radius: 0.3rem;
+    border-top-right-radius: 0.3rem;
+    border-bottom-left-radius: 0rem !important;
+    border-bottom-right-radius: 0rem !important;
+    border-top: 3px solid black;
+    border-left: 3px solid black;
+    border-right: 3px solid black;
+  }
+}
+
+.buy,
+.sell {
+  background-color: #1c1e21;
+  padding: 0.2rem 0.3rem;
+}
+
+.buy {
+  border: 3px solid black;
+}
+
+.sell {
+  border-bottom: 3px solid black;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  border-bottom-left-radius: 0.3rem;
+  border-bottom-right-radius: 0.3rem;
+}
+
+.small-details {
+  margin-top: 0.8rem;
+}
+
+.back-btn {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-back,
+.btn-back:focus,
+.btn-back:hover {
+  border: 3px solid black;
+}

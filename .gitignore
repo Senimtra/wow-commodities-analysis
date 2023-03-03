@@ -2,6 +2,7 @@
 __pycache__
 api_credentials.txt
 api_access_token.txt
+/static/images/licenses
 /data
 *.pyc
 db.sqlite3

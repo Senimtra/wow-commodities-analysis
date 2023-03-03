@@ -1,11 +1,10 @@
 <!-- prettier-ignore -->
 {% extends "base.html" %}
-
 {% block title %}Profitable Items{% endblock %}
-
 {% block content %}
+
 <h1>Profitable Items</h1>
-<p>Most profitable items and when to buy/sell them</p>
+<p>Most Profitable Items and when to Buy/Sell them</p>
 
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
   {% for item in items_ranked %}
