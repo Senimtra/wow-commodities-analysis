@@ -12,9 +12,9 @@
 <div class="container">
   <div class="row">
     <div class="col-home-text col-lg-6 col-md-12">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>The available unique items are visible, and a clear decrease can be observed after the traditional raid days of Wednesday, Thursday, and a strong weekend.</p>
+      <p>However, after the weekly reset on Wednesday, the supply increases significantly for raids and other activities and remains consistently high for most of the time.</p>
+      <p>Despite this, daily peaks can still be perceived, providing some insight into the fluctuating availability of these items. In conclusion, the data suggests that the supply of unique items is influenced by the frequency and timing of raids and other events in the game.</p>
     </div>
     <div class="col-home-chart col-lg-6 col-md-12">
       <canvas id="items-chart" width="800" height="450"></canvas>
@@ -35,6 +35,7 @@
           return date.toLocaleDateString('en-US', options);
         });
 
+        // ### Available unique items chart ###
         new Chart(document.getElementById('items-chart'), {
           type: 'line',
           data: {
@@ -57,9 +58,9 @@
       </script>
     </div>
     <div class="col-home-text col-lg-6 col-md-12">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>The chart of traded quantities of items shows an almost inverse trend, with strong trading activity on weekends and on days where raiding is generally less common.</p>
+      <p>The day of the reset is one of the weakest, with high demand for basic materials that are often traded in higher volumes and become less available.</p>
+      <p>During this time, players have more time for other activities such as collecting or crafting items to earn gold in the auction house. This trend reflects the ebb and flow of player activity and the dynamics of supply and demand in the game economy.</p>
     </div>
     <div class="col-home-chart col-lg-6 col-md-12">
       <canvas id="quantities-chart" width="800" height="450"></canvas>
@@ -71,6 +72,7 @@
       <script>
         const quantities = JSON.parse(document.getElementById('quantity-counts-list').textContent);
 
+        // ### Traded quantities chart ###
         new Chart(document.getElementById('quantities-chart'), {
           type: 'line',
           data: {
@@ -93,9 +95,9 @@
       </script>
     </div>
     <div class="col-home-text col-lg-6 col-md-12">
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam cupiditate tempora, assumenda harum, aliquid quas, sunt quasi voluptatem perferendis provident repellendus temporibus beatae.</p>
+      <p>For comparison, here's an example of an older server that has become a "ghost server". Many players have left and only a few remain, resulting in very few guilds and in-game activities.</p>
+      <p>Other than the usual fluctuations in player activity throughout the day, there are no remarkable patterns.</p>
+      <p>Supply and demand are on a completely different level here, and some items may be unavailable or only obtainable at absurdly high prices. Overall, this server is a shadow of its former self compared to more active servers.</p>
     </div>
     <div class="col-home-chart col-lg-6 col-md-12">
       <canvas id="revenues-chart" width="800" height="450"></canvas>
@@ -107,6 +109,7 @@
       <script>
         const revenues = JSON.parse(document.getElementById('revenue-counts-list').textContent);
 
+        // ### Total market revenue chart ###
         new Chart(document.getElementById('revenues-chart'), {
           type: 'line',
           data: {

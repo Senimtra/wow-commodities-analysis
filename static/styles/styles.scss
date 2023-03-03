@@ -31,7 +31,6 @@ body {
   background-size: cover;
   background-attachment: fixed;
   color: white;
-  height: 100vh;
 }
 
 /* ### Navbar styles ### */
@@ -48,6 +47,10 @@ body {
   }
 }
 
+.navbar a:hover {
+  color: grey;
+}
+
 /* ### Content styles ### */
 
 .content-container {
@@ -59,12 +62,12 @@ body {
   border-radius: 0.3rem;
   overflow-y: auto;
   border-top: 2.5rem solid rgba(0, 0, 255, 0);
-  border-bottom: 2.5rem solid rgba(0, 0, 255, 0);
+
+  bottom: 0;
 }
 
 .content {
-  padding: 0 2rem;
-  height: calc(100vh - 15rem);
+  padding: 0 2rem 3rem;
 }
 
 .content-container::-webkit-scrollbar {
