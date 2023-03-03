@@ -7,38 +7,38 @@
 <h1>Profitable Items</h1>
 <p>Most profitable items and when to buy/sell them</p>
 
-<div class="container">
-  <div class="row">
-    {% for item in items_ranked %}
-    <div class="col-lg-4 col-md-6 mb-3">
-      <div class="card">
-        <div class="row g-0">
-          <div class="col-md-3">
-            <img src="{{item.link}}" class="img-fluid rounded-start" alt="{{item.name}}" />
-            <form method="post" action="{% url 'details' item_id=item.item_id %}">
-              {% csrf_token %}
-              <input type="hidden" name="link" value="{{item.link}}" />
-              <input type="hidden" name="name" value="{{item.name}}" />
-              <input type="hidden" name="quantity" value="{{item.total_quantity}}" />
-              <input type="hidden" name="rank" value="{{forloop.counter}}" />
-              <input type="hidden" name="comb_rank" value="{{item.rank}}" />
-              <input type="hidden" name="profit" value="{{item.profit}}" />
-              <button class="btn btn-sm btn-primary" type="submit">Details</button>
-            </form>
-          </div>
-          <div class="col-md-9">
-            <div class="card-body">
-              <h5 class="card-title">{{item.name}}</h5>
-              <div>Quantity: {{item.total_quantity}}</div>
-              <div>Potential Profit: {{item.profit}}</div>
-              <p class="card-text"><small class="text-muted">ID: {{item.item_id}}&nbsp;&nbsp; Comb: {{item.rank}}&nbsp;&nbsp; Rank: {{forloop.counter}}</small></p>
-            </div>
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+  {% for item in items_ranked %}
+  <div class="col">
+    <div class="card profit-card h-100 d-flex flex-column">
+      <div class="row g-0">
+        <div class="col-md-4 col-img">
+          <img src="{{item.link}}" alt="{{item.name}}" />
+          <form method="post" action="{% url 'details' item_id=item.item_id %}">
+            {% csrf_token %}
+            <input type="hidden" name="link" value="{{item.link}}" />
+            <input type="hidden" name="name" value="{{item.name}}" />
+            <input type="hidden" name="quantity" value="{{item.total_quantity}}" />
+            <input type="hidden" name="rank" value="{{forloop.counter}}" />
+            <input type="hidden" name="comb_rank" value="{{item.rank}}" />
+            <input type="hidden" name="profit" value="{{item.profit}}" />
+            <button class="btn btn-sm btn-dark no-hover-border" type="submit">Details</button>
+          </form>
+        </div>
+        <div class="col-md-8 col-text d-flex flex-column">
+          <div class="card-body flex-grow-1">
+            <h5 class="card-title">{{item.name}}</h5>
+            <div>Quantity: {{item.total_quantity}}</div>
+            <div>Potential Profit: {{item.profit}}</div>
+            <p class="card-text">
+              <small class="text-muted">ID: {{item.item_id}}<br />Combined: {{item.rank}}&nbsp;&nbsp; Rank: {{forloop.counter}}</small>
+            </p>
           </div>
         </div>
       </div>
     </div>
-    {% endfor %}
   </div>
+  {% endfor %}
 </div>
 
 {% endblock %}

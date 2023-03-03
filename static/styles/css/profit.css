@@ -1,0 +1,42 @@
+/* ### Profit styles ### */
+.profit-card {
+  background-image: url("/static/images/parchment.jpg");
+  background-size: cover;
+  opacity: 0.75;
+  border: 1px solid black;
+}
+
+.col-img {
+  padding: 1.2rem 0.3rem 0 1.2rem;
+}
+.col-img img {
+  width: 100%;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+  border-top: 3px solid black;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+}
+.col-img button {
+  width: 100%;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-left: 3px solid black;
+  border-right: 3px solid black;
+  border-bottom: 3px solid black;
+  margin-bottom: 1.2rem;
+}
+.col-img button:not(:hover) {
+  border-color: black !important;
+}
+.col-img .no-hover-border {
+  border-color: #000000 !important;
+}
+.col-img .no-hover-border:hover {
+  border-color: #000000 !important;
+  box-shadow: none;
+}
+
+.col-text {
+  color: white !important;
+}
