@@ -14,6 +14,10 @@ def home(request):
    template = loader.get_template('home.html')
    return HttpResponse(template.render())
 
+def analysis(request):
+   template = loader.get_template('analysis.html')
+   return HttpResponse(template.render())
+
 def market(request):
    # Get the number of unique items per timestamp
    item_counts = Commodities.objects.values('timestamp').annotate(count_items = Count('id')).order_by('timestamp')
